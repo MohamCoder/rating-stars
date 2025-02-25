@@ -25,7 +25,7 @@
 <div class="mt-32 flex items-center justify-between mx-64">
   <span>
     <h1>find ratings <br /> & upload <br /> yours</h1>
-    <p class="text-black-75 max-w-96">
+    <p class="text-black-75 max-w-md">
       Enim eligendi culpa iusto consequuntur distinctio impedit ipsa quas eos
       ipsam ipsum numquam maiores repellendus pariatur dicta aperiam, eaque
       neque eius exercitationem?
@@ -33,7 +33,7 @@
   </span>
   <img
     src="/undraw_reviews_ukai.svg"
-    class="h-96 mt-16 select-none"
+    class="h-[352px] mt-16 select-none"
     alt="ratings"
   />
 </div>
