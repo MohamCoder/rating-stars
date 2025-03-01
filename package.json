@@ -24,11 +24,6 @@
 	],
 	"svelte": "./dist/index.js",
 	"type": "module",
-	"exports": {
-		".": {
-			"svelte": "./dist/index.js"
-		}
-	},
 	"peerDependencies": {
 		"svelte": "^5.0.0"
 	},
