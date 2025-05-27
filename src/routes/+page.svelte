@@ -1,7 +1,36 @@
-<script>
+<script lang="ts">
   import BorderedButton from "$lib/component/BorderedButton.svelte";
   import Button from "$lib/component/Button.svelte";
   import Review from "$lib/component/Review.svelte";
+  let phone: HTMLDivElement;
+  let dropdown: HTMLDivElement;
+  let dropdownReviewsContainer: HTMLDivElement;
+
+  function sticky(container: HTMLDivElement, offset: number) {
+    if (window.pageYOffset >= offset) {
+      container.style.position = "fixed";
+      container.style.translate = "-100% 0rem";
+    } else {
+      container.style.position = "relative";
+      container.style.translate = "0 0";
+    }
+  }
+
+  function phoneDropdown() {
+    if (dropdown.className.includes("h-56")) {
+      dropdown.className = dropdown.className.replace(/h-56/g, "");
+      return (dropdownReviewsContainer.style.opacity = "0%");
+    }
+    setTimeout(() => {
+      dropdownReviewsContainer.style.opacity = "100%";
+    }, 100);
+    dropdown.className += " h-56";
+  }
+
+  $effect(() => {
+    const phoneOffset = phone.offsetTop;
+    window.addEventListener("scroll", () => sticky(phone, phoneOffset));
+  });
 </script>
 
 <div class="main-star"></div>
@@ -69,48 +98,95 @@
   </div>
 </div>
 
-<div class="h-auto w-full bg-black-5 mt-16 py-16">
+<div class="h-[300rem] w-full bg-black-5 mt-16 py-8">
   <div class="flex justify-between mx-64">
-    <div>
-      <h3 class="font-thin">find ratings with a click of a button</h3>
+    <div class="mt-16">
+      <h2 class="font-thin max-w-lg">find ratings with a click of a button</h2>
       <p class="text-black-75 mt-4 max-w-md">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse id
         lectus eu ligula ultrices molestie sit amet ut ex. Fusce id quam
         tristique, malesuada augue a, suscipit libero. Praesent quis venenatis
         leo, quis finibus eros, Sed ut mauris interdum, suscipit orci vehicula.
       </p>
+      <div class="mt-[100%] py-24">
+        <h2 class="font-thin max-w-lg">search ratings with ez</h2>
+        <p class="text-black-75 mt-4 max-w-md">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+          id lectus eu ligula ultrices molestie sit amet ut ex. Fusce id quam
+          tristique, malesuada augue a, suscipit libero. Praesent quis venenatis
+          leo, quis finibus eros, Sed ut mauris interdum, suscipit orci
+          vehicula.
+        </p>
+      </div>
+      <div class="mt-[100%]">
+        <h2 class="font-thin max-w-lg">found it ! see the rate</h2>
+        <p class="text-black-75 mt-4 max-w-md">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+          id lectus eu ligula ultrices molestie sit amet ut ex. Fusce id quam
+          tristique, malesuada augue a, suscipit libero. Praesent quis venenatis
+          leo, quis finibus eros, Sed ut mauris interdum, suscipit orci
+          vehicula.
+        </p>
+      </div>
     </div>
 
-    <div class="h-[52rem] w-[26.75rem] px-8 border border-black rounded-[48px]">
-      <div class="flex w-full mr-1 mt-8">
-        <div
-          class="w-64 h-10 border rounded-full border-black-25 flex items-center"
-        >
+    <div>
+      <div
+        class="h-[52rem] top-8 w-[26.75rem] px-8 border border-black rounded-[48px]"
+        bind:this={phone}
+      >
+        <div class="flex w-full mr-1 mt-8">
           <div
-            class="ml-2 mr-16 w-full h-3 bg-black-10 rounded-full shadow-xl"
-          ></div>
+            class="w-64 h-10 border rounded-full border-black-25 flex items-center"
+          >
+            <div
+              class="ml-2 mr-16 w-full h-3 bg-black-10 rounded-full shadow-xl"
+            ></div>
+          </div>
+          <div
+            class="w-[22.75rem] h-0 bg-black-25 shadow-2xl rounded-[24px] absolute mt-12 transition-all"
+            bind:this={dropdown}
+          >
+            <div
+              class="flex flex-col space-y-4 px-8 opacity-0 transition-all"
+              bind:this={dropdownReviewsContainer}
+            >
+              <Review stars={5} className="mt-8">
+                <div class="w-64 h-2 bg-black-50 rounded-full shadow-xl"></div>
+                <div
+                  class="w-56 h-2 bg-black-50 opacity-50 rounded-full ml-4 shadow-xl mt-1"
+                ></div>
+              </Review>
+              <Review stars={4} className="mt-8">
+                <div class="w-64 h-2 bg-black-50 rounded-full shadow-xl"></div>
+                <div
+                  class="w-56 h-2 bg-black-50 opacity-50 rounded-full ml-4 shadow-xl mt-1"
+                ></div>
+              </Review>
+            </div>
+          </div>
+
+          <div class="scale-50 h-0 w-24">
+            <Button onClick={() => phoneDropdown()}>search</Button>
+          </div>
         </div>
-        <div class="scale-50 h-0 w-24">
-          <Button>search</Button>
-        </div>
+
+        {#each ["For you:", "Other liker:"] as title}
+          <h6 class="mt-8 text-black-75">{title}</h6>
+          <hr class="mt-2 text-black-25" />
+
+          <div class="flex flex-col space-y-4">
+            {#each [...Array(2).keys()] as i}
+              <Review stars={5 - i} className="mt-8">
+                <div class="w-64 h-2 bg-black-25 rounded-full shadow-xl"></div>
+                <div
+                  class="w-56 h-2 bg-black-10 rounded-full ml-4 shadow-xl mt-1"
+                ></div>
+              </Review>
+            {/each}
+          </div>
+        {/each}
       </div>
-
-      {#each ["For you:", "Other liker:"] as title}
-        <h6 class="mt-8 text-black-75">{title}</h6>
-        <hr class="mt-2 text-black-25" />
-
-        <div class="flex flex-col space-y-4">
-          {#each [...Array(2).keys()] as i}
-            <Review stars={5 - i} className="mt-8">
-              <div class="w-64 h-2 bg-black-25 rounded-full shadow-xl"></div>
-              <div
-                class="w-56 h-2 bg-black-10 rounded-full ml-4 shadow-xl mt-1"
-              ></div>
-            </Review>
-          {/each}
-        </div>
-      {/each}
-
     </div>
   </div>
 </div>

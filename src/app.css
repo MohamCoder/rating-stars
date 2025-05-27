@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
   h1 {
     line-height: 160%;
     @apply text-[76px] font-ubuntu font-medium;
@@ -29,7 +32,6 @@
     line-height: 160%;
     @apply text-[18px] font-ubuntu font-medium;
   }
-
 }
 
 @layer components {
@@ -43,8 +45,8 @@
     aspect-ratio: 1;
     clip-path: polygon(50% 0, 79% 90%, 2% 35%, 98% 35%, 21% 90%);
     width: 2048px;
-    top:0;
-    left:0;
+    top: 0;
+    left: 0;
     transform: translate(-50%, -40%);
     position: absolute;
     z-index: -1;
@@ -59,11 +61,12 @@
   --font-ubuntu: "ubuntu";
   --color-primary: rgb(240, 156, 73);
   --color-secondary: rgb(240, 126, 72);
-  --color-black: rgb(26, 17, 8);
-  --color-black-75: rgba(26, 17, 8, 0.75);
-  --color-black-50: rgba(26, 17, 8, 0.5);
-  --color-black-25: rgba(26, 17, 8, 0.25);
-  --color-black-10: rgba(26, 17, 8, 0.1);
-  --color-black-5: rgba(26, 17, 8, 0.05);
+  --color-black: rgb(26, 17, 8); 
+  --color-black-75: rgb(82, 74, 70);
+  --color-black-50: rgb(140, 136, 132);
+  --color-black-25: rgb(196, 194, 192);
+  --color-black-10: rgb(230, 229, 228);
+  --color-black-5: rgb(242, 242, 241);
+
   --color-error: rgb(240, 126, 72);
 }
