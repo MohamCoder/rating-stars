@@ -5,6 +5,10 @@
   let phone: HTMLDivElement;
   let dropdown: HTMLDivElement;
   let dropdownReviewsContainer: HTMLDivElement;
+  let ripple: HTMLDivElement;
+  let rippleTrigger: HTMLButtonElement|null = $state(null);
+  let searchText: HTMLDivElement;
+  let searchTriggered = false;
 
   function sticky(container: HTMLDivElement, offset: number) {
     if (window.pageYOffset >= offset) {
@@ -17,6 +21,7 @@
   }
 
   function phoneDropdown() {
+    if (searchTriggered) return;
     if (dropdown.className.includes("h-56")) {
       dropdown.className = dropdown.className.replace(/h-56/g, "");
       return (dropdownReviewsContainer.style.opacity = "0%");
@@ -25,11 +30,20 @@
       dropdownReviewsContainer.style.opacity = "100%";
     }, 100);
     dropdown.className += " h-56";
+    searchTriggered = true;
   }
 
   $effect(() => {
-    const phoneOffset = phone.offsetTop;
-    window.addEventListener("scroll", () => sticky(phone, phoneOffset));
+    const PhoneOffset = phone.offsetTop;
+    window.addEventListener("scroll", () => sticky(phone, PhoneOffset));
+    window.addEventListener("scroll", () => {
+      if (window.pageYOffset >= searchText.offsetTop - searchText.offsetHeight) {
+        phoneDropdown();
+      } else if (searchTriggered) {
+        searchTriggered = false;
+        phoneDropdown();
+      }
+    });
   });
 </script>
 
@@ -69,7 +83,7 @@
   />
 </hero>
 
-<Button className="mt-32 mx-auto text-white shadow-2xl" ariaLabel="Get Started">
+<Button className="mt-32 mx-auto text-white shadow-2xl" ariaLabel="Get Started" >
   <p>Get Started</p>
   <img
     src="/arrow_down.svg"
@@ -109,7 +123,9 @@
         leo, quis finibus eros, Sed ut mauris interdum, suscipit orci vehicula.
       </p>
       <div class="mt-[100%] py-24">
-        <h2 class="font-thin max-w-lg">search ratings with ez</h2>
+        <h2 class="font-thin max-w-lg pt-8" bind:this={searchText}>
+          search ratings with ez
+        </h2>
         <p class="text-black-75 mt-4 max-w-md">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
           id lectus eu ligula ultrices molestie sit amet ut ex. Fusce id quam
@@ -167,7 +183,34 @@
           </div>
 
           <div class="scale-50 h-0 w-24">
-            <Button onClick={() => phoneDropdown()}>search</Button>
+            <Button
+              bind:button={rippleTrigger}
+              onClick={() => {
+                ripple.style.transition = "none";
+                ripple.style.transition =
+                  "transform 300ms ease, height 300ms ease, width 300ms ease, opacity 300ms ease";
+                ripple.style.transform = "scale(1)";
+                ripple.style.height = "12rem";
+                ripple.style.width = "12rem";
+                setTimeout(() => {
+                  ripple.style.opacity = "0%";
+                }, 300);
+                setTimeout(() => {
+                  ripple.style.transition = "none";
+                  ripple.style.transform = "scale(0)";
+                  ripple.style.opacity = "30%";
+                  ripple.style.height = "0rem";
+                  ripple.style.width = "0rem";
+                }, 600);
+              }}
+            >
+              search
+              <div
+                bind:this={ripple}
+                class="bg-white rounded-full absolute transition-[height,width,opacity] duration-300 opacity-30 clip z-0"
+                style="height: 0rem; width: 0rem"
+              ></div>
+            </Button>
           </div>
         </div>
 
