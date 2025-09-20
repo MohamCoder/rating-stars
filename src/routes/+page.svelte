@@ -7,10 +7,13 @@
   let dropdown: HTMLDivElement;
   let dropdownReviewsContainer: HTMLDivElement;
   let ripple: HTMLDivElement;
-  let rippleTrigger: HTMLButtonElement|null = $state(null);
+  let rippleTrigger: HTMLButtonElement | null = $state(null);
   let secondParagraph: HTMLDivElement;
   let thirdParagraph: HTMLDivElement;
+  let recommendations: HTMLDivElement;
+  let searchResults: HTMLDivElement;
   let searchTriggered = false;
+  let searchResultTriggered = false;
 
   function sticky(container: HTMLDivElement, offset: number) {
     if (window.pageYOffset >= offset) {
@@ -35,15 +38,51 @@
     searchTriggered = true;
   }
 
+  function PhoneSearchResult() {
+    if (searchResultTriggered) return;
+    if (recommendations.className.includes("opacity-0")) {
+      recommendations.className = recommendations.className.replace(
+        /opacity-0/g,
+        "",
+      );
+      return (searchResults.style.opacity = "0%");
+    }
+    setTimeout(() => {
+      searchResults.style.opacity = "100%";
+    }, 100);
+    recommendations.className += " opacity-0";
+    searchResultTriggered = true;
+  }
+
   $effect(() => {
     const PhoneOffset = phone.offsetTop;
     window.addEventListener("scroll", () => sticky(phone, PhoneOffset));
     window.addEventListener("scroll", () => {
-      if (window.pageYOffset >= secondParagraph.offsetTop - secondParagraph.offsetHeight) {
+      if (
+        window.pageYOffset >=
+          secondParagraph.offsetTop - secondParagraph.offsetHeight &&
+        !searchResultTriggered
+      ) {
         phoneDropdown();
-      } else if (searchTriggered) {
+      } else if (searchTriggered && !searchResultTriggered) {
         searchTriggered = false;
         phoneDropdown();
+      }
+    });
+    window.addEventListener("scroll", () => {
+      if (
+        window.pageYOffset >=
+        thirdParagraph.offsetTop - thirdParagraph.offsetHeight
+      ) {
+        PhoneSearchResult();
+        if (searchTriggered) {
+          rippleTrigger?.click();
+          searchTriggered = false;
+          phoneDropdown();
+        }
+      } else if (searchResultTriggered) {
+        searchResultTriggered = false;
+        PhoneSearchResult();
       }
     });
   });
@@ -85,7 +124,7 @@
   />
 </hero>
 
-<Button className="mt-32 mx-auto text-white shadow-2xl" ariaLabel="Get Started" >
+<Button className="mt-32 mx-auto text-white shadow-2xl" ariaLabel="Get Started">
   <p>Get Started</p>
   <img
     src="/arrow_down.svg"
@@ -137,7 +176,9 @@
         </p>
       </div>
       <div class="mt-[100%]">
-        <h2 class="font-thin max-w-lg" bind:this={thirdParagraph}>found it ! see the rate</h2>
+        <h2 class="font-thin max-w-lg" bind:this={thirdParagraph}>
+          found it ! see the rate
+        </h2>
         <p class="text-black-75 mt-4 max-w-md">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
           id lectus eu ligula ultrices molestie sit amet ut ex. Fusce id quam
@@ -162,7 +203,7 @@
             ></div>
           </div>
           <div
-            class="w-[22.75rem] h-0 bg-black-25 shadow-2xl rounded-[24px] absolute mt-12 transition-all"
+            class="w-[22.75rem] h-0 bg-black-25 shadow-2xl rounded-[24px] absolute mt-12 transition-all z-10"
             bind:this={dropdown}
           >
             <div
@@ -216,13 +257,48 @@
           </div>
         </div>
 
-        {#each ["For you:", "Other liker:"] as title}
-          <h6 class="mt-8 text-black-75">{title}</h6>
+        <div class="absolute w-[22.75rem] z-[-1]" bind:this={recommendations}>
+          {#each ["For you:", "Other liked:"] as title}
+            <h6 class="mt-8 text-black-75">{title}</h6>
+            <hr class="mt-2 text-black-25 w-full" />
+
+            <div class="flex flex-col space-y-4">
+              {#each [...Array(2).keys()] as i}
+                <ReviewStars stars={5 - i} className="mt-8">
+                  <div
+                    class="w-64 h-2 bg-black-25 rounded-full shadow-xl"
+                  ></div>
+                  <div
+                    class="w-56 h-2 bg-black-10 rounded-full ml-4 shadow-xl mt-1"
+                  ></div>
+                </ReviewStars>
+              {/each}
+            </div>
+          {/each}
+        </div>
+
+        <div
+          bind:this={searchResults}
+          style="opacity: 0%"
+          class="transition-all duration-75"
+        >
+          <h6 class="mt-6 text-black-75">results:</h6>
           <hr class="mt-2 text-black-25" />
 
           <div class="flex flex-col space-y-4">
+            {#each ["apple-store-logo", "google-play-logo", "microsoft-logo"] as logo}
+              <Review className="mt-6" stars={5} logo="./{logo}.svg">
+                <div class="w-64 h-2 bg-black-25 rounded-full shadow-xl"></div>
+              </Review>
+            {/each}
+          </div>
+
+          <h6 class="mt-8 text-black-75">You Might Like:</h6>
+          <hr class="mt-2 text-black-25" />
+
+          <div class="flex flex-col space-y-4 mt-4">
             {#each [...Array(2).keys()] as i}
-              <ReviewStars stars={5 - i} className="mt-8">
+              <ReviewStars stars={5 - i} className="mt-2">
                 <div class="w-64 h-2 bg-black-25 rounded-full shadow-xl"></div>
                 <div
                   class="w-56 h-2 bg-black-10 rounded-full ml-4 shadow-xl mt-1"
@@ -230,11 +306,8 @@
               </ReviewStars>
             {/each}
           </div>
-        {/each}
+        </div>
       </div>
     </div>
   </div>
 </div>
-<Review Logo="./apple-logo.svg" Stars={4}>
-    <div class="w-64 h-2 bg-black-25 rounded-full shadow-xl"></div>
-</Review>

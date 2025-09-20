@@ -1,13 +1,14 @@
 <script lang="ts">
   import ReviewStars from "./ReviewStars.svelte";
-  export let Stars: number = 0;
-  export let Logo: string = "";
+  export let stars: number = 0;
+  export let logo: string = "";
+  export let className: string = "";
 </script>
 
-<div class="flex flex-col items-center">
+<div class="flex flex-col items-center {className}">
   <div class="w-full flex flex-row gap-4 items-center">
-    <img src={Logo} alt="logo" class="h-10 w-10" />
+    <img src={logo} alt="logo" class="h-7 w-7" />
     <slot/>
   </div>
-  <ReviewStars stars={Stars} className="mt-8" />
+  <ReviewStars stars={stars} className="mt-2" />
 </div>
