@@ -1,13 +1,15 @@
 <script lang="ts">
   import BorderedButton from "$lib/component/BorderedButton.svelte";
   import Button from "$lib/component/Button.svelte";
+  import ReviewStars from "$lib/component/ReviewStars.svelte";
   import Review from "$lib/component/Review.svelte";
   let phone: HTMLDivElement;
   let dropdown: HTMLDivElement;
   let dropdownReviewsContainer: HTMLDivElement;
   let ripple: HTMLDivElement;
   let rippleTrigger: HTMLButtonElement|null = $state(null);
-  let searchText: HTMLDivElement;
+  let secondParagraph: HTMLDivElement;
+  let thirdParagraph: HTMLDivElement;
   let searchTriggered = false;
 
   function sticky(container: HTMLDivElement, offset: number) {
@@ -37,7 +39,7 @@
     const PhoneOffset = phone.offsetTop;
     window.addEventListener("scroll", () => sticky(phone, PhoneOffset));
     window.addEventListener("scroll", () => {
-      if (window.pageYOffset >= searchText.offsetTop - searchText.offsetHeight) {
+      if (window.pageYOffset >= secondParagraph.offsetTop - secondParagraph.offsetHeight) {
         phoneDropdown();
       } else if (searchTriggered) {
         searchTriggered = false;
@@ -123,7 +125,7 @@
         leo, quis finibus eros, Sed ut mauris interdum, suscipit orci vehicula.
       </p>
       <div class="mt-[100%] py-24">
-        <h2 class="font-thin max-w-lg pt-8" bind:this={searchText}>
+        <h2 class="font-thin max-w-lg pt-8" bind:this={secondParagraph}>
           search ratings with ez
         </h2>
         <p class="text-black-75 mt-4 max-w-md">
@@ -135,7 +137,7 @@
         </p>
       </div>
       <div class="mt-[100%]">
-        <h2 class="font-thin max-w-lg">found it ! see the rate</h2>
+        <h2 class="font-thin max-w-lg" bind:this={thirdParagraph}>found it ! see the rate</h2>
         <p class="text-black-75 mt-4 max-w-md">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
           id lectus eu ligula ultrices molestie sit amet ut ex. Fusce id quam
@@ -167,18 +169,18 @@
               class="flex flex-col space-y-4 px-8 opacity-0 transition-all"
               bind:this={dropdownReviewsContainer}
             >
-              <Review stars={5} className="mt-8">
+              <ReviewStars stars={5} className="mt-8">
                 <div class="w-64 h-2 bg-black-50 rounded-full shadow-xl"></div>
                 <div
                   class="w-56 h-2 bg-black-50 opacity-50 rounded-full ml-4 shadow-xl mt-1"
                 ></div>
-              </Review>
-              <Review stars={4} className="mt-8">
+              </ReviewStars>
+              <ReviewStars stars={4} className="mt-8">
                 <div class="w-64 h-2 bg-black-50 rounded-full shadow-xl"></div>
                 <div
                   class="w-56 h-2 bg-black-50 opacity-50 rounded-full ml-4 shadow-xl mt-1"
                 ></div>
-              </Review>
+              </ReviewStars>
             </div>
           </div>
 
@@ -220,12 +222,12 @@
 
           <div class="flex flex-col space-y-4">
             {#each [...Array(2).keys()] as i}
-              <Review stars={5 - i} className="mt-8">
+              <ReviewStars stars={5 - i} className="mt-8">
                 <div class="w-64 h-2 bg-black-25 rounded-full shadow-xl"></div>
                 <div
                   class="w-56 h-2 bg-black-10 rounded-full ml-4 shadow-xl mt-1"
                 ></div>
-              </Review>
+              </ReviewStars>
             {/each}
           </div>
         {/each}
@@ -233,3 +235,6 @@
     </div>
   </div>
 </div>
+<Review Logo="./apple-logo.svg" Stars={4}>
+    <div class="w-64 h-2 bg-black-25 rounded-full shadow-xl"></div>
+</Review>

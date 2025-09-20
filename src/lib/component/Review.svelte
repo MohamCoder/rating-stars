@@ -1,18 +1,13 @@
 <script lang="ts">
-  export let stars: number = 0;
-  export let className: string = "";
+  import ReviewStars from "./ReviewStars.svelte";
+  export let Stars: number = 0;
+  export let Logo: string = "";
 </script>
 
-<div class="{className}">
-  <slot/>
-  <div class="flex flex-row mt-2 justify-center w-full space-x-2">
-    {#each [...Array(5).keys()] as i}
-      <img
-        src={stars > i ? "./star.svg" : "./empty_star.svg"}
-        class="h-6 w-6 select-none"
-        draggable="false"
-        alt="star"
-      />
-    {/each}
+<div class="flex flex-col items-center">
+  <div class="w-full flex flex-row gap-4 items-center">
+    <img src={Logo} alt="logo" class="h-10 w-10" />
+    <slot/>
   </div>
+  <ReviewStars stars={Stars} className="mt-8" />
 </div>
