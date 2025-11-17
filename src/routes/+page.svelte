@@ -8,6 +8,7 @@
   let dropdownReviewsContainer: HTMLDivElement;
   let ripple: HTMLDivElement;
   let rippleTrigger: HTMLButtonElement | null = $state(null);
+  let paragraphs: HTMLDivElement;
   let secondParagraph: HTMLDivElement;
   let thirdParagraph: HTMLDivElement;
   let recommendations: HTMLDivElement;
@@ -15,13 +16,24 @@
   let searchTriggered = false;
   let searchResultTriggered = false;
 
-  function sticky(container: HTMLDivElement, offset: number) {
-    if (window.pageYOffset >= offset) {
+  function stickyPhone(
+    container: HTMLDivElement,
+    offset: number,
+    release: number,
+    top: number = 0,
+  ) {
+    if (window.pageYOffset >= offset && window.pageYOffset < release) {
       container.style.position = "fixed";
       container.style.translate = "-100% 0rem";
+      container.style.top = `${top}rem`;
+    } else if (window.pageYOffset >= release) {
+      container.style.position = "relative";
+      container.style.translate = "0 0";
+      container.style.top = `${release - offset + 32}px`;
     } else {
       container.style.position = "relative";
       container.style.translate = "0 0";
+      container.style.top = `${top}rem`;
     }
   }
 
@@ -56,7 +68,14 @@
 
   $effect(() => {
     const PhoneOffset = phone.offsetTop;
-    window.addEventListener("scroll", () => sticky(phone, PhoneOffset));
+    window.addEventListener("scroll", () =>
+      stickyPhone(
+        phone,
+        PhoneOffset,
+        thirdParagraph.offsetTop,
+        2
+      ),
+    );
     window.addEventListener("scroll", () => {
       if (
         window.pageYOffset >=
@@ -155,7 +174,7 @@
 
 <div class="h-[300rem] w-full bg-black-5 mt-16 py-8">
   <div class="flex justify-between mx-64">
-    <div class="mt-16">
+    <div class="mt-16" bind:this={paragraphs}>
       <h2 class="font-thin max-w-lg">find ratings with a click of a button</h2>
       <p class="text-black-75 mt-4 max-w-md">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse id
@@ -293,7 +312,7 @@
             {/each}
           </div>
 
-          <h6 class="mt-8 text-black-75">You Might Like:</h6>
+          <h6 class="mt-8 text-black-75">You May Like:</h6>
           <hr class="mt-2 text-black-25" />
 
           <div class="flex flex-col space-y-4 mt-4">
