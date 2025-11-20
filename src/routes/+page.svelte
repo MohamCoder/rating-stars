@@ -15,6 +15,29 @@
   let searchResults: HTMLDivElement;
   let searchTriggered = false;
   let searchResultTriggered = false;
+  let statementIndex: number = $state(0);
+  const statements: {
+    name: string;
+    company: string;
+    text: string;
+    picture: string;
+    companyPicture: string;
+  }[] = [
+    {
+      name: "Sandra Marks",
+      company: "Creative Director at GitHub",
+      text: "“Robert is great. We worked together really well and we’ll definitely contract his services in the future.”",
+      picture: "./sandra-marks.jpg",
+      companyPicture: "./github-logo.png",
+    },
+    {
+      name: "Steve Jobs",
+      company: "CEO at Apple",
+      text: "“We had a great experience working with Robert on our new app. He was very communicative and easy to work with.”",
+      picture: "./steve-jobs.jpg",
+      companyPicture: "./apple-logo.png",
+    },
+  ];
 
   function stickyPhone(
     container: HTMLDivElement,
@@ -67,14 +90,16 @@
   }
 
   $effect(() => {
+    setInterval(() => {
+      if (statementIndex === statements.length - 1) {
+        statementIndex = 0;
+      } else {
+        statementIndex += 1;
+      }
+    },5000)
     const PhoneOffset = phone.offsetTop;
     window.addEventListener("scroll", () =>
-      stickyPhone(
-        phone,
-        PhoneOffset,
-        thirdParagraph.offsetTop,
-        2
-      ),
+      stickyPhone(phone, PhoneOffset, thirdParagraph.offsetTop, 2),
     );
     window.addEventListener("scroll", () => {
       if (
@@ -172,7 +197,7 @@
   </div>
 </div>
 
-<div class="h-[300rem] w-full bg-black-5 mt-16 py-8">
+<div class="h-[189rem] w-full bg-black-5 mt-16 py-8">
   <div class="flex justify-between mx-64">
     <div class="mt-16" bind:this={paragraphs}>
       <h2 class="font-thin max-w-lg">find ratings with a click of a button</h2>
@@ -311,7 +336,6 @@
               </Review>
             {/each}
           </div>
-
           <h6 class="mt-8 text-black-75">You May Like:</h6>
           <hr class="mt-2 text-black-25" />
 
@@ -328,5 +352,52 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+<div
+  class="flex flex-col items-center justify-center h-[32rem] w-full bg-black-10 py-16"
+>
+  <div class="h-96 flex">
+    <div class="h-96">
+      <div
+        class="w-36 h-36 rounded-full flex items-center justify-center text-center bg-cover bg-center bg-no-repeat "
+        style="background-image: url({statements[statementIndex].picture});"
+      >
+        <div
+          class="text-black-75 text-9xl stack-sans-notch scale-200 translate-y-[-5rem] transform-[rotate(180deg)] opacity-50"
+        >
+          "
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col justify-center items-center mx-16">
+      <h4 class="w-96 font-semibold">
+        {statements[statementIndex].text}
+      </h4>
+
+      <h6 class="w-auto text-black-75 mt-4 font-normal">{statements[statementIndex].name}</h6>
+      <h6 class="w-auto text-black-75 font-normal">
+        {statements[statementIndex].company}
+      </h6>
+    </div>
+
+    <div class="h-96 flex flex-col justify-end items-end">
+      <div
+        class="w-36 h-36 rounded-full flex items-center justify-center text-center scale-75 bg-cover bg-center bg-no-repeat"
+        style="background-image: url({statements[statementIndex].companyPicture});"
+      >
+        <div
+          class="text-black-75 text-9xl stack-sans-notch scale-200 translate-y-[5rem] opacity-50"
+        >
+          "
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="flex space-x-1">
+    <div class="h-3 w-3 {statementIndex === 0 ? "bg-primary" : "bg-black-25"} rounded-full"></div>
+    <div class="h-3 w-3 {statementIndex === 1 ? "bg-primary" : "bg-black-25"} rounded-full"></div>
   </div>
 </div>

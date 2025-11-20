@@ -56,12 +56,19 @@
     clip-path: polygon(50% 0, 79% 90%, 2% 35%, 98% 35%, 21% 90%);
     @apply h-28 w-28 bg-[var(--color-primary)];
   }
+
+  .stack-sans-notch {
+    font-family: "Stack Sans Notch", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+  }
 }
 @theme {
   --font-ubuntu: "ubuntu";
   --color-primary: rgb(240, 156, 73);
   --color-secondary: rgb(240, 126, 72);
-  --color-black: rgb(26, 17, 8); 
+  --color-black: rgb(26, 17, 8);
   --color-black-75: rgb(82, 74, 70);
   --color-black-50: rgb(140, 136, 132);
   --color-black-25: rgb(196, 194, 192);
