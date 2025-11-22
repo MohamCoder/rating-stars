@@ -3,6 +3,7 @@
   import Button from "$lib/component/Button.svelte";
   import ReviewStars from "$lib/component/ReviewStars.svelte";
   import Review from "$lib/component/Review.svelte";
+  import FAQElement from "$lib/component/FAQElement.svelte";
   let phone: HTMLDivElement;
   let dropdown: HTMLDivElement;
   let dropdownReviewsContainer: HTMLDivElement;
@@ -96,7 +97,7 @@
       } else {
         statementIndex += 1;
       }
-    },5000)
+    }, 5000);
     const PhoneOffset = phone.offsetTop;
     window.addEventListener("scroll", () =>
       stickyPhone(phone, PhoneOffset, thirdParagraph.offsetTop, 2),
@@ -197,7 +198,7 @@
   </div>
 </div>
 
-<div class="h-[189rem] w-full bg-black-5 mt-16 py-8">
+<div class="h-[190rem] w-full bg-black-5 mt-16 py-8">
   <div class="flex justify-between mx-64">
     <div class="mt-16" bind:this={paragraphs}>
       <h2 class="font-thin max-w-lg">find ratings with a click of a button</h2>
@@ -361,7 +362,7 @@
   <div class="h-96 flex">
     <div class="h-96">
       <div
-        class="w-36 h-36 rounded-full flex items-center justify-center text-center bg-cover bg-center bg-no-repeat "
+        class="w-36 h-36 rounded-full flex items-center justify-center text-center bg-cover bg-center bg-no-repeat"
         style="background-image: url({statements[statementIndex].picture});"
       >
         <div
@@ -377,7 +378,9 @@
         {statements[statementIndex].text}
       </h4>
 
-      <h6 class="w-auto text-black-75 mt-4 font-normal">{statements[statementIndex].name}</h6>
+      <h6 class="w-auto text-black-75 mt-4 font-normal">
+        {statements[statementIndex].name}
+      </h6>
       <h6 class="w-auto text-black-75 font-normal">
         {statements[statementIndex].company}
       </h6>
@@ -386,7 +389,8 @@
     <div class="h-96 flex flex-col justify-end items-end">
       <div
         class="w-36 h-36 rounded-full flex items-center justify-center text-center scale-75 bg-cover bg-center bg-no-repeat"
-        style="background-image: url({statements[statementIndex].companyPicture});"
+        style="background-image: url({statements[statementIndex]
+          .companyPicture});"
       >
         <div
           class="text-black-75 text-9xl stack-sans-notch scale-200 translate-y-[5rem] opacity-50"
@@ -397,7 +401,45 @@
     </div>
   </div>
   <div class="flex space-x-1">
-    <div class="h-3 w-3 {statementIndex === 0 ? "bg-primary" : "bg-black-25"} rounded-full"></div>
-    <div class="h-3 w-3 {statementIndex === 1 ? "bg-primary" : "bg-black-25"} rounded-full"></div>
+    <div
+      class="h-3 w-3 {statementIndex === 0
+        ? 'bg-primary'
+        : 'bg-black-25'} rounded-full"
+    ></div>
+    <div
+      class="h-3 w-3 {statementIndex === 1
+        ? 'bg-primary'
+        : 'bg-black-25'} rounded-full"
+    ></div>
+  </div>
+</div>
+
+<div class="mt-48 flex flex-col px-[24rem]">
+  <h3>
+    before sending sending a message to the company,here are some things you
+    should know:
+  </h3>
+  <div class="m-16 flex space-y-4 flex-col">
+
+    <FAQElement question="What timezone are you in?">
+      My current timezone is <span class="text-primary">UTC+3</span>
+    </FAQElement>
+
+    <FAQElement question="Do we make a contract?">
+      No, we don't make contracts.
+    </FAQElement>
+
+    <FAQElement question="How much do we charge for a website?">
+      We charge <span class="text-primary">€100</span> per website.
+    </FAQElement>
+
+    <FAQElement question="Do you charge by the hour?">
+      I do not charge by the hour. I prefer to eliminate the stress of counting the hours. Instead, I charge a flat fee per project, regardless of duration.
+    </FAQElement>
+
+    <FAQElement question="Are you working with a team?">
+      Yes, we are working with a team.
+    </FAQElement>
+
   </div>
 </div>
